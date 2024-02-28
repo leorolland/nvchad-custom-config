@@ -58,8 +58,8 @@ local plugins = {
       extensions = {
         project = {
           base_dirs = {
-            {'~/_repo', max_depth = 1},
-            {'~/clones', max_depth = 1},
+            {'~/_repo', max_depth = 2},
+            {'~/clones', max_depth = 2},
           },
           display_type = "minimal",
           theme = "dropdown",
@@ -81,12 +81,13 @@ local plugins = {
   },
   { "tpope/vim-fugitive", lazy = false},
   { "FooSoft/vim-argwrap", lazy = false},
-  { "nvim-neotest/neotest-go", lazy = false },
+  { "nvim-neotest/neotest-go" },
+  { "antoinemadec/FixCursorHold.nvim" },
+  { "nvim-lua/plenary.nvim", lazy = false },
   {
-    "nvim-neotest/neotest",
+    "nvim-neotest/neotest", lazy = false,
     requires = {
       "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
     },
     config = function()
@@ -112,6 +113,16 @@ local plugins = {
       "nvim-lua/plenary.nvim"
     },
   },
+  {
+    "ThePrimeagen/refactoring.nvim", lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+    end,
+  }
 }
 
 return plugins

@@ -2,7 +2,7 @@ require("neotest").setup({
   adapters = {
     require("neotest-go")({
       experimental = {
-        test_table = true,
+        test_table = false,
       },
       args = { "-count=1", "-timeout=2s" }
     })
