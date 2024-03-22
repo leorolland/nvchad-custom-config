@@ -37,7 +37,24 @@ M.abc = {
     ["tT"] = {':lua require("neotest").run.run(vim.fn.expand("%"))<cr>'},
     ["gd"] = {':Telescope lsp_definitions<cr>'},
     ["gi"] = {':Telescope lsp_implementations<cr>'},
-    ["gr"] = {':Telescope lsp_references<cr>'}
+    ["gr"] = {':Telescope lsp_references<cr>'},
+    ["<leader>s"] = {':vsplit<cr>'},
+    ["<leader>S"] = {':split<cr>'},
+    ["<leader>ft"] = {
+      function()
+        local currentFile = vim.api.nvim_buf_get_name(0)
+        local isTestFile = string.match(currentFile, "_test.go$")
+
+        local fileToOpen
+        if isTestFile then
+          fileToOpen = string.gsub(currentFile, "_test", "")
+        else
+          fileToOpen = string.sub(currentFile, 1, string.len(currentFile) - 3) .. "_test.go"
+        end
+
+        vim.cmd.edit(fileToOpen)
+      end, { desc = "Switch to test/code" }
+    },
   },
   v = {
     ["<C-j>"] = {"5j"},

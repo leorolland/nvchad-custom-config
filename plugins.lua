@@ -83,12 +83,14 @@ local plugins = {
   { "FooSoft/vim-argwrap", lazy = false},
   { "nvim-neotest/neotest-go" },
   { "antoinemadec/FixCursorHold.nvim" },
+  { "nvim-neotest/nvim-nio" },
   { "nvim-lua/plenary.nvim", lazy = false },
   {
     "nvim-neotest/neotest", lazy = false,
     requires = {
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/nvim-nio"
     },
     config = function()
       require "custom.configs.neotest"
