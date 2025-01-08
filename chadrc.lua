@@ -3,7 +3,7 @@ local M = {}
 
 M.ui = {
   transparency = false,
-  theme = 'catppuccin',
+  theme = 'github_light',
   nvdash = {
     load_on_startup = true,
     -- header = {
@@ -62,6 +62,14 @@ local autocmd = vim.api.nvim_create_autocmd
 --     require("neotest").run.run()
 --   end,
 -- })
+
+autocmd("BufReadPost", {
+  pattern = { "*_test.go" },
+  callback = function()
+    vim.cmd(':silent g/t.Run/normal jzfi{') -- find all t.Run, jump 1 line below, fold inside
+    vim.cmd(':silent g/testCases/normal zfi{') -- find all tabletest, fold inside
+  end,
+})
 
 autocmd("VimResized", {
   pattern = '*',

@@ -19,7 +19,9 @@ local plugins = {
         "git_config",
         "gitcommit",
         "gitignore",
-        "hcl"
+        "hcl",
+        "typescript",
+        "javascript"
       },
     },
   },
@@ -41,11 +43,13 @@ local plugins = {
     opts = {
       ensure_installed = {
         "gopls",
-        "golangci-lint-langserver",
-        "golangci-lint",
+        -- "golangci-lint-langserver",
+        -- "golangci-lint",
         "gofumpt",
         "json-lsp",
-        "yaml-language-server"
+        "yaml-language-server",
+        -- "typescript-language-server",
+        -- "llm-ls"
       },
     },
   },
@@ -58,10 +62,10 @@ local plugins = {
       extensions = {
         project = {
           base_dirs = {
-            {'~/_repo', max_depth = 2},
-            {'~/clones', max_depth = 2},
+            {'~/_repo', max_depth = 1},
+            {'~/clones', max_depth = 1},
           },
-          display_type = "minimal",
+          displaytype = "minimal",
           theme = "dropdown",
           search_by = "title",
           sync_with_nvim_tree = true,
@@ -123,6 +127,16 @@ local plugins = {
     },
     config = function()
       require("refactoring").setup()
+    end,
+  },
+  {
+    "leoluz/nvim-dap-go", lazy = false,
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require('dap-go').setup()
     end,
   }
 }
