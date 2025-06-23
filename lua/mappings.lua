@@ -30,6 +30,8 @@ map("n", "td", ':Telescope diagnostics<cr>', { desc = "Diagnostics" })
 map("n", "ts", ':Telescope lsp_document_symbols<cr>', { desc = "File symbols" })
 map("n", "tS", ':Telescope lsp_dynamic_workspace_symbols<cr>', { desc = "All symbols" })
 map("n", "tt", ':lua require("neotest").run.run()<cr>', { desc = "Neotest func" })
+map("n", "to", ':lua require("neotest").output_panel.open({ enter = true, last_run = true, quiet = true })<cr>', { desc = "Neotest output panel" })
+map("n", "toc", ':lua require("neotest").output_panel.clear()<cr>', { desc = "Neotest output panel clear" })
 map("n", "tT", ':lua require("neotest").run.run(vim.fn.expand("%"))<cr>', { desc = "Neotest all funcs" })
 map("n", "gd", ':Telescope lsp_definitions<cr>', { desc = "Go to definition" })
 map("n", "gi", ':Telescope lsp_implementations<cr>', { desc = "Go to implementations" })
@@ -50,7 +52,7 @@ map("n", "<leader>ft", function()
     fileToOpen = string.sub(currentFile, 1, string.len(currentFile) - 3) .. "_test.go"
   end
   vim.cmd.edit(fileToOpen)
-end, { desc = "Run all tests" })
+end, { desc = "Jump to tests/implementation" })
 
 -- external calls
 

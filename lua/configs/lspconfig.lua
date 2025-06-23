@@ -1,5 +1,6 @@
 local nvlsp = require "nvchad.configs.lspconfig"
 local lspconfig = require "lspconfig"
+local configs = require 'lspconfig/configs'
 
 nvlsp.defaults() -- loads nvchad's defaults
 
@@ -13,3 +14,15 @@ for _, lsp in ipairs(servers) do
     capabilities = nvlsp.capabilities,
   }
 end
+
+-- golangcilint
+lspconfig.golangci_lint_ls.setup {
+  on_attach = nvlsp.on_attach,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  filetypes = {'go'},
+  root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+  init_options = {
+    command = { "custom-gcl", "run", "--output.json.path", "stdout", "--show-stats=false", "--issues-exit-code=1" };
+  }
+}

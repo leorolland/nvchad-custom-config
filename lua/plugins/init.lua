@@ -5,6 +5,19 @@ return {
     opts = require "configs.conform",
   },
   {
+    "nvim-tree/nvim-tree.lua", lazy = false,
+    opts = {
+      view = {
+        width = {
+          min = 30,
+        }
+      },
+      filters = {
+        dotfiles = false,
+      },
+    },
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
@@ -63,25 +76,11 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-telescope/telescope-project.nvim"
-    },
     config = function()
       require('telescope').load_extension('fzf')
-      require('telescope').load_extension('project')
     end,
     opts = {
       extensions = {
-        project = {
-          base_dirs = {
-            {'~/_repo', max_depth = 1},
-            {'~/clones', max_depth = 1},
-          },
-          displaytype = "minimal",
-          theme = "dropdown",
-          search_by = "title",
-          sync_with_nvim_tree = true,
-        },
         fzf = {
           fuzzy = true,                    -- false will only do exact matching
           override_generic_sorter = true,  -- override the generic sorter
@@ -105,17 +104,38 @@ return {
   },
   { "tpope/vim-fugitive", lazy = false},
   { "FooSoft/vim-argwrap", lazy = false},
-  { "nvim-neotest/neotest-go" },
-  { "antoinemadec/FixCursorHold.nvim" },
+  -- { "antoinemadec/FixCursorHold.nvim" },
   { "nvim-neotest/nvim-nio" },
   { "nvim-lua/plenary.nvim", lazy = false },
+  { "nvim-neotest/neotest-go", lazy = false },
   {
     "nvim-neotest/neotest", lazy = false,
     requires = {
+      "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
-      "nvim-neotest/nvim-nio"
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-neotest/neotest-go",
     },
+    config = function()
+      -- get neotest namespace (api call creates or returns namespace)
+      local neotest_ns = vim.api.nvim_create_namespace("neotest")
+      vim.diagnostic.config({
+        virtual_text = {
+          format = function(diagnostic)
+            local message =
+              diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+            return message
+          end,
+        },
+      }, neotest_ns)
+      require("neotest").setup({
+        -- your neotest config here
+        adapters = {
+          require("neotest-go"),
+        },
+      })
+    end,
   },
   {
     "fatih/vim-go", lazy = false
