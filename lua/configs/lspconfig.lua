@@ -15,6 +15,12 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+local golangci_lint_binary = "golangci-lint"
+
+if vim.fn.executable('custom-gcl') == 1 then
+  golangci_lint_binary = 'custom-gcl'
+end
+
 -- golangcilint
 lspconfig.golangci_lint_ls.setup {
   on_attach = nvlsp.on_attach,
@@ -23,6 +29,6 @@ lspconfig.golangci_lint_ls.setup {
   filetypes = {'go'},
   root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
   init_options = {
-    command = { "custom-gcl", "run", "--output.json.path", "stdout", "--show-stats=false", "--issues-exit-code=1" };
+    command = { golangci_lint_binary, "run", "--output.json.path", "stdout", "--show-stats=false", "--issues-exit-code=1" };
   }
 }
