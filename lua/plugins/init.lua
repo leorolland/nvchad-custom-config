@@ -185,5 +185,50 @@ return {
     config = function()
       require("dapui").setup()
     end,
-  }
+  },
+  -- {
+  --   "olimorris/codecompanion.nvim", lazy=false,
+  --   config = function()
+  --     require("codecompanion").setup({
+  --       adapters = {
+  --         ai_endpoints_mistral = function()
+  --           return require("codecompanion.adapters").extend("openai_compatible", {
+  --             env = {
+  --               url = "https://oai.endpoints.preprod.ai.cloud.ovh.net/",
+  --               api_key = os.getenv("AI_API_KEY"),
+  --               chat_url = "/v1/chat/completions",
+  --             },
+  --             schema = {
+  --               model = {
+  --                 default = "mistral@latest"
+  --               }
+  --             }
+  --           })
+  --         end,
+  --         ai_endpoints_code_completion = function()
+  --           return require("codecompanion.adapters").extend("openai_compatible", {
+  --             env = {
+  --               url = "https://oai.endpoints.preprod.ai.cloud.ovh.net/",
+  --               api_key = os.getenv("AI_API_KEY"),
+  --               chat_url = "/v1/chat/completions",
+  --             },
+  --             schema = {
+  --               model = {
+  --                 default = "code_completion@latest"
+  --               }
+  --             }
+  --           })
+  --         end,
+  --       },
+  --       strategies = {
+  --         chat = {
+  --           adapter = "ai_endpoints_mistral",
+  --         },
+  --         inline = {
+  --           adapter = "ai_endpoints_code_completion",
+  --         },
+  --       },
+  --     })
+  --   end,
+  -- }
 }
