@@ -32,11 +32,12 @@ Personal Neovim config built on the [NvChad](https://github.com/NvChad/NvChad) s
 | `lua/plugins/init.lua` | Plugin specs |
 | `lua/configs/` | Per-plugin setup (LSP, formatting, tests) |
 
-## Notes
+## What this adds over stock NvChad
 
-- `<leader>r` restarts LSP clients (`:lsp restart`, nvim 0.12+).
-- `autoread` + `checktime` autocmds reload buffers changed outside the editor (opencode, git, code generators) so gopls stays in sync.
-- Go formatting is handled by vim-go (gofmt on save); Lua formatting runs through conform with `<leader>fm`.
-- LSP servers are enabled in `lua/configs/lspconfig.lua`; binaries come from Mason (`ensure_installed` in `lua/plugins/init.lua`).
+- **External-edit sync** — `autoread` + `checktime` autocmds (`FocusGained`, `BufEnter`, `CursorHold`, `TermLeave`) reload buffers changed by opencode, git or code generators so gopls never goes stale; `<leader>r` restarts LSP clients if a session does get corrupted.
+- **Go toolchain** — vim-go with gofmt-on-save and `tf`/`ta` test runners, gopls built with `-tags=e2e`, golangci-lint LSP with auto-detection of repo-local versioned binaries, table-test folding in `*_test.go`, `<leader>ft` to jump between code and tests, neotest (`tt`/`to`), and DAP remote-attach to dlv behind Tilt (port 30000).
+- **tmux integration** — `<C-e>` opens a tmux pane and publishes the nvim socket so other panes (and alacritty clicks) can drive the editor through `nvr`.
+- **LSP/editor extras** — `gd`/`gi`/`gr` through Telescope, diagnostics float on idle, yamlls preloaded with k8s/GitLab CI/helm/kustomize/vector schemas, ArgWrap (`<leader>v`), marks, fugitive (`<leader>gg`), `gG` to open the current line in the GitLab/GitHub web UI.
+- **Wider tooling** — treesitter parsers for ~25 languages (go, helm, terraform, yang, jsonnet, ...), Mason `ensure_installed` aligned with the enabled servers.
 
 `lazy-lock.json` is tracked so plugin versions stay reproducible.
