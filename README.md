@@ -15,9 +15,8 @@ Personal Neovim config built on the [NvChad](https://github.com/NvChad/NvChad) s
    ```
 3. Clone this repo as your config:
    ```sh
-   git clone -b housekeeping git@github.com:leorolland/nvchad-custom-config.git ~/.config/nvim
+   git clone git@github.com:leorolland/nvchad-custom-config.git ~/.config/nvim
    ```
-   (until this branch is merged into `main`, keep `-b housekeeping`; afterwards the flag is unnecessary)
 4. Start `nvim` — lazy.nvim bootstraps itself and installs the plugins pinned in `lazy-lock.json`. Restart nvim once the first sync finishes.
 5. Run `:Mason` once — it installs the language servers and tools listed in `ensure_installed` (`lua/plugins/init.lua`): gopls, golangci-lint, yaml, html, css, gofumpt.
 
