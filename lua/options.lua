@@ -1,6 +1,12 @@
 require "nvchad.options"
 
--- add yours here!
+vim.opt.autoread = true -- reload buffers changed on disk so LSPs stay in sync with external edits
 
--- local o = vim.o
--- o.cursorlineopt ='both' -- to enable cursorline!
+vim.filetype.add({
+  filename = {
+    ["Tiltfile"] = "starlark",
+  },
+  pattern = {
+    ["Tiltfile.*"] = "starlark",
+  },
+})

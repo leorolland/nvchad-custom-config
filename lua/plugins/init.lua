@@ -5,15 +5,22 @@ return {
     opts = require "configs.conform",
   },
   {
-    "nvim-tree/nvim-tree.lua", lazy = false,
+    "nvim-tree/nvim-tree.lua",
+    lazy = false,
     opts = {
       view = {
         width = {
           min = 30,
-        }
+        },
+      },
+      git = {
+        enable = true,
+        ignore = false, -- THIS LINE: Tells nvim-tree to show files ignored by .gitignore
       },
       filters = {
         dotfiles = false,
+        git_ignored = false, -- THIS LINE: Ensure the filter doesn't hide them
+        custom = { "^.git$" }, -- ...EXCEPT exactly ".git"
       },
     },
   },
@@ -21,149 +28,62 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "vim",
-        "lua",
-        "json",
-        "xml",
-        "go",
-        "gomod",
-        "gosum",
-        "make",
-        "sql",
-        "yaml",
-        "yang",
-        "dockerfile",
-        "git_rebase",
-        "git_config",
-        "gitcommit",
-        "gitignore",
-        "hcl",
-        "typescript",
-        "javascript"
-      },
+        "vim", "lua", "luadoc", "printf", "json", "xml", "go", "gomod", "gosum", "make", "sql", "yaml",
+        "yang", "dockerfile", "git_rebase", "git_config", "gitcommit", "gitignore",
+        "hcl", "terraform", "typescript", "javascript", "starlark", "gpg", "helm", "jsonnet", "php"
+      }
     },
-  },
-   {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "jose-elias-alvarez/null-ls.nvim",
-      config = function()
-        require "../configs.null-ls"
-      end,
-    },
-     config = function()
-        require "../configs.lspconfig"
-     end,
   },
   {
-    "williamboman/mason.nvim",
+    "neovim/nvim-lspconfig",
+    config = function()
+      require "../configs.lspconfig"
+    end,
+  },
+  {
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
-        "gopls",
-        -- "golangci-lint-langserver",
-        -- "golangci-lint",
-        "gofumpt",
-        "json-lsp",
-        "yaml-language-server",
-        -- "typescript-language-server",
-        -- "llm-ls"
+        "gopls", "gofumpt", "yaml-language-server", "html-lsp", "css-lsp",
+        "golangci-lint-langserver", "golangci-lint",
       },
     },
   },
   {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
+    'nvim-telescope/telescope-fzf-native.nvim', lazy=false,
+    build = 'make'
   },
   {
-    "nvim-telescope/telescope.nvim",
-    config = function()
-      require('telescope').load_extension('fzf')
+    "nvim-telescope/telescope.nvim", lazy=false,
+    config = function(_, opts)
+      require("telescope").setup(opts)
+      require("telescope").load_extension("fzf")
     end,
     opts = {
-      extensions = {
-        fzf = {
-          fuzzy = true,                    -- false will only do exact matching
-          override_generic_sorter = true,  -- override the generic sorter
-          override_file_sorter = true,     -- override the file sorter
-          case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-        }
-      },
-      sorting_strategy = "ascending",
       defaults = {
-        file_ignore_patterns = { ".git/", "node_modules/" },
-        layout_config = {
-            height = 0.95,
-            prompt_position = "top",
-            vertical = {
-                mirror = true,
-                preview_cutoff = 0,
-            },
-        },
+        file_ignore_patterns = { ".git/" },
+        sorting_strategy = "ascending",
+        no_ignore = true,
+        hidden = true,
       },
     },
   },
   { "tpope/vim-fugitive", lazy = false},
   { "FooSoft/vim-argwrap", lazy = false},
-  -- { "antoinemadec/FixCursorHold.nvim" },
   { "nvim-neotest/nvim-nio" },
   { "nvim-lua/plenary.nvim", lazy = false },
   { "nvim-neotest/neotest-go", lazy = false },
   {
     "nvim-neotest/neotest", lazy = false,
-    requires = {
-      "nvim-neotest/nvim-nio",
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-neotest/neotest-go",
-    },
     config = function()
-      -- get neotest namespace (api call creates or returns namespace)
-      local neotest_ns = vim.api.nvim_create_namespace("neotest")
-      vim.diagnostic.config({
-        virtual_text = {
-          format = function(diagnostic)
-            local message =
-              diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
-            return message
-          end,
-        },
-      }, neotest_ns)
-      require("neotest").setup({
-        -- your neotest config here
-        adapters = {
-          require("neotest-go"),
-        },
-      })
+      require "configs.neotest"
     end,
   },
-  {
-    "fatih/vim-go", lazy = false
-  },
+  { "fatih/vim-go", lazy = false },
   {
     "chentoast/marks.nvim", lazy = false,
-     config = function()
-      require'marks'.setup {
-        default_mappings = true,
-        signs = true,
-        mappings = {}
-      }
-     end,
-  },
-  {
-    "nvim-pack/nvim-spectre",
-    requires = {
-      "nvim-lua/plenary.nvim"
-    },
-  },
-  {
-    "ThePrimeagen/refactoring.nvim", lazy = false,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
     config = function()
-      require("refactoring").setup()
+      require'marks'.setup { default_mappings = true, signs = true }
     end,
   },
   {
@@ -171,64 +91,46 @@ return {
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-treesitter/nvim-treesitter",
+      -- "rcarriga/nvim-dap-ui"
     },
     config = function()
-      require('dap-go').setup()
+      local dap = require("dap")
+      local dap_go = require("dap-go")
+
+      -- 1. Initialize dap-go first (this populates the default configs)
+      dap_go.setup()
+
+      -- 2. Define your remote adapter
+      dap.adapters["go-remote"] = {
+        type = "server",
+        host = "127.0.0.1",
+        port = 30000,
+        -- no execute config = dlv is already ran by Tilt
+      }
+
+      -- 3. APPEND to the existing configurations instead of overwriting
+      -- This keeps the "Debug test" and "Debug" options provided by dap-go
+      table.insert(dap.configurations.go, {
+        type = "go-remote",
+        name = "dlv connect localhost:30000",
+        mode = "remote",
+        request = "attach",
+        substitutePath = {
+          -- { from = "${workspaceFolder}", to = "/" },
+        },
+      })
+
+      -- 4. UI Setup
+      -- require("dapui").setup()
     end,
   },
   {
     "rcarriga/nvim-dap-ui", lazy = false,
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio"
-    },
-    config = function()
-      require("dapui").setup()
-    end,
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    config = function() require("dapui").setup() end,
   },
-  -- {
-  --   "olimorris/codecompanion.nvim", lazy=false,
-  --   config = function()
-  --     require("codecompanion").setup({
-  --       adapters = {
-  --         ai_endpoints_mistral = function()
-  --           return require("codecompanion.adapters").extend("openai_compatible", {
-  --             env = {
-  --               url = "https://oai.endpoints.preprod.ai.cloud.ovh.net/",
-  --               api_key = os.getenv("AI_API_KEY"),
-  --               chat_url = "/v1/chat/completions",
-  --             },
-  --             schema = {
-  --               model = {
-  --                 default = "mistral@latest"
-  --               }
-  --             }
-  --           })
-  --         end,
-  --         ai_endpoints_code_completion = function()
-  --           return require("codecompanion.adapters").extend("openai_compatible", {
-  --             env = {
-  --               url = "https://oai.endpoints.preprod.ai.cloud.ovh.net/",
-  --               api_key = os.getenv("AI_API_KEY"),
-  --               chat_url = "/v1/chat/completions",
-  --             },
-  --             schema = {
-  --               model = {
-  --                 default = "code_completion@latest"
-  --               }
-  --             }
-  --           })
-  --         end,
-  --       },
-  --       strategies = {
-  --         chat = {
-  --           adapter = "ai_endpoints_mistral",
-  --         },
-  --         inline = {
-  --           adapter = "ai_endpoints_code_completion",
-  --         },
-  --       },
-  --     })
-  --   end,
-  -- }
+  {
+    'likec4/likec4.nvim', lazy = false,
+    build = 'npm install -g @likec4/language-server'
+  }
 }

@@ -1,22 +1,31 @@
+local neotest_ns = vim.api.nvim_create_namespace("neotest")
+vim.diagnostic.config({
+  virtual_text = {
+    format = function(diagnostic)
+      return diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+    end,
+  },
+}, neotest_ns)
+
 require("neotest").setup({
   adapters = {
     require("neotest-go")({
       experimental = {
         test_table = false,
       },
-      args = { "-count=1", "-timeout=2s" }
-    })
+      args = { "-count=1", "-timeout=2s" },
+    }),
   },
   floating = {
     border = "rounded",
     max_height = 0.99,
     max_width = 0.99,
-    options = {}
+    options = {},
   },
   diagnostic = {
-    enabled = false
+    enabled = false,
   },
   quickfix = {
-    enabled = false
-  }
+    enabled = false,
+  },
 })
