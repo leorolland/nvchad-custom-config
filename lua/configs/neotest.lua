@@ -9,11 +9,9 @@ vim.diagnostic.config({
 
 require("neotest").setup({
   adapters = {
-    require("neotest-go")({
-      experimental = {
-        test_table = false,
-      },
-      args = { "-count=1", "-timeout=2s" },
+    require("neotest-golang")({
+      runner = "gotestsum",
+      go_test_args = { "-v", "-count=1", "-timeout=2s" },
     }),
   },
   floating = {
